@@ -1,0 +1,70 @@
+pipeline{
+    agent any
+    stages{
+        stage ('Build Backend'){
+            steps{
+                bat 'echo Build do Backend'
+                bat 'mvn clean package'
+            }
+        }
+        stage ('Unit Tests'){
+            steps{
+                bat 'echo Unit Tests'
+                bat 'mvn test'
+            }
+        }
+        stage ('Sonar Analysis'){
+            environment{
+                scannerHome = tool 'SONAR_SCANNER'
+            }
+            steps{
+                bat 'echo Sonar Analysis'
+                withSonarQubeEnv ('SONAR_LOCAL'){
+                    bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0141b0033ba4fa66f576e3937c543cb17fcc4878 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Aplication.java,**/src/main/java/br/ce/wcaquino/taskbackend/utils/ValidationException.java,src/main/java/br/ce/wcaquino/taskbackend/controller/TaskController.java,src/main/java/br/ce/wcaquino/taskbackend/TaskBackendApplication.java,src/main/java/br/ce/wcaquino/taskbackend/controller/RootController.java"
+                }
+            }
+        }
+        stage ('Quality Gate'){
+            steps{
+                sleep(50)
+                timeout(time: 1, unit: 'MINUTES'){
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('Docker Build Image') {
+                      steps {
+                          script {
+                              dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
+                                '-f ./deploy/Dockerfile .')
+                          }
+                      }
+                  }
+          stage('Docker Push Image') {
+              steps {
+                  script {
+                          docker.withRegistry('https://registry.hub.docker.com', 'treelogy-sandbox-docker-hub') {
+                          dockerapp.push('latest')
+                          dockerapp.push("${env.BUILD_ID}")
+                      }
+                  }
+              }
+          }
+        stage ('Deploy Kubernetes'){
+          agent {
+            kubernetes {
+              cloud 'kubernetes'
+            }
+          }
+          environment {
+                tag = "${env.BUILD_ID}"
+            }
+            steps{
+                //sed "s/{{BITBUCKET_COMMIT}}/${env.BUILD_ID}/g" | kubectl apply -f
+                sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
+                sh 'cat deploy/deployment.yaml'
+                kubernetesDeploy configs: 'deploy/deployment.yaml', kubeconfigId: 'treelogy-sandbox-kubeconfig-rancher'
+            }
+        }
+    }
+}
