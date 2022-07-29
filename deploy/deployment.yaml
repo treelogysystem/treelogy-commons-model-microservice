@@ -48,7 +48,7 @@ metadata:
   namespace: treelogy-template
   name: treelogy-template-back-ingress
   annotations:
-    allow.http: "false"
+    allow.http: "true"
 spec:
   rules:
     - host: treelogy-template-back.rancher.treelogy.eco.br
