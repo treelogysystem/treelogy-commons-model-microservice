@@ -19,7 +19,7 @@ public class UserControler implements UserController {
             return ResponseEntity.ok(userRepository.getUserById(id));
         }
         catch (Exception e){
-            throw new Exception(e.getMessage());
+            throw new Exception("Internal server error");
         }
     }
 
@@ -29,7 +29,7 @@ public class UserControler implements UserController {
             return ResponseEntity.ok(userRepository.save(user));
         }
         catch (Exception e){
-            throw new Exception(e.getMessage());
+            throw new Exception("Internal server error");
         }
     }
 }
