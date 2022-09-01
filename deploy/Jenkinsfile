@@ -50,21 +50,14 @@ pipeline{
                   }
               }
           }
-        stage ('Deploy Kubernetes'){
-          agent {
-            kubernetes {
-              cloud 'kubernetes'
-            }
-          }
-          environment {
-                tag = "${env.BUILD_ID}"
-            }
+          stage('Deploy Kubernetes') {
             steps{
-                //sed "s/{{BITBUCKET_COMMIT}}/${env.BUILD_ID}/g" | kubectl apply -f
                 sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
                 sh 'cat deploy/deployment.yaml'
-                kubernetesDeploy configs: 'deploy/deployment.yaml', kubeconfigId: 'treelogy-sandbox-kubeconfig-rancher'
+                kubeconfig(credentialsId: 'treelogy-sandbox-kubeconfig-rancher', serverUrl: 'https://rancher.treelogy.eco.br') {
+                    sh 'kubectl apply -f my-kubernetes-directory'
+                }
             }
-        }
+          }
     }
 }
