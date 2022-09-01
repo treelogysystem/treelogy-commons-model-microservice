@@ -54,7 +54,7 @@ pipeline{
             steps{
                 sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
                 sh 'cat deploy/deployment.yaml'
-                kubeconfig(credentialsId: 'treelogy-sandbox-kubeconfig-rancher', serverUrl: 'https://rancher.treelogy.eco.br') {
+                withKubeConfig(credentialsId: 'treelogy-sandbox-kubeconfig-rancher', serverUrl: 'https://rancher.treelogy.eco.br') {
                     sh 'kubectl apply -f my-kubernetes-directory'
                 }
             }
