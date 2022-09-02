@@ -2,6 +2,12 @@ pipeline{
     agent any
     stages{
 
+        stage ('Initializion'){
+            steps{
+                def dockerHome = tool 'my-docker'         
+                env.PATH = "${dockerHome}/bin:${env.PATH}"
+            }
+        }
         stage ('Build Backend'){
             steps{
                 sh 'echo Build do Backend'
@@ -14,29 +20,8 @@ pipeline{
                 sh 'mvn test'
             }
         }
-        /* stage ('Sonar Analysis'){
-            environment{
-                scannerHome = tool 'SONAR_SCANNER'
-            }
-            steps{
-                sh 'echo Sonar Analysis'
-                withSonarQubeEnv ('SONAR_LOCAL'){
-                    sh "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0141b0033ba4fa66f576e3937c543cb17fcc4878 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**//* .mvn *//**,**//* src/test *//**,**//* model *//**,**Aplication.java,**//* src/main/java/br/ce/wcaquino/taskbackend/utils/ValidationException.java,src/main/java/br/ce/wcaquino/taskbackend/controller/TaskController.java,src/main/java/br/ce/wcaquino/taskbackend/TaskBackendApplication.java,src/main/java/br/ce/wcaquino/taskbackend/controller/RootController.java"
-                }
-            }
-        } */
-        /* stage ('Quality Gate'){
-            steps{
-                sleep(50)
-                timeout(time: 1, unit: 'MINUTES'){
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        } */
         stage('Docker Build Image') {
                       steps {
-                          def dockerHome = tool 'my-docker'         
-                          env.PATH = "${dockerHome}/bin:${env.PATH}"
                           script {
                               dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
                                 '-f ./deploy/Dockerfile .')
