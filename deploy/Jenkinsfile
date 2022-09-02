@@ -25,6 +25,8 @@ pipeline{
         stage('Docker Build Image') {
                       steps {
                           script {
+                              def dockerHome = tool 'docker'
+                              env.PATH = "${dockerHome}/bin:${env.PATH}"
                               dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
                                 '-f ./deploy/Dockerfile .')
                           }
