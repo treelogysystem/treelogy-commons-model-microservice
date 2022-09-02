@@ -2,10 +2,6 @@ pipeline{
     agent any
     stages{
 
-        stage ('Initialize'){
-            def dockerHome = tool 'myDocker'         
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-        }
         stage ('Build Backend'){
             steps{
                 sh 'echo Build do Backend'
@@ -39,6 +35,8 @@ pipeline{
         } */
         stage('Docker Build Image') {
                       steps {
+                          def dockerHome = tool 'my-docker'         
+                          env.PATH = "${dockerHome}/bin:${env.PATH}"
                           script {
                               dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
                                 '-f ./deploy/Dockerfile .')
