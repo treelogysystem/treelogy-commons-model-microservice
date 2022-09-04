@@ -32,6 +32,9 @@ pipeline{
             }
         }
         stage('Deploy Kubernetes') {
+            environment {
+                tag = "${env.BUILD_ID}"
+            }
             steps {
                 sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
                 sh 'cat deploy/deployment.yaml'
