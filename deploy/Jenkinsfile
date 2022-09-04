@@ -1,15 +1,6 @@
 pipeline{
     agent any
     stages{
-
-        stage ('Initialization'){
-            steps{
-                script {
-                    def dockerHome = tool 'docker'
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"
-                }
-            }
-        }
         stage ('Build Backend'){
             steps{
                 sh 'echo Build do Backend'
@@ -23,33 +14,33 @@ pipeline{
             }
         }
         stage('Docker Build Image') {
-                      steps {
-                          script {
-                              def dockerHome = tool 'docker'
-                              env.PATH = "${dockerHome}/bin:${env.PATH}"
-                              dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
-                                '-f ./deploy/Dockerfile .')
-                          }
-                      }
-                  }
-          stage('Docker Push Image') {
-              steps {
-                  script {
-                          docker.withRegistry('https://registry.hub.docker.com', 'treelogy-sandbox-docker-hub') {
-                          dockerapp.push('latest')
-                          dockerapp.push("${env.BUILD_ID}")
-                      }
-                  }
-              }
-          }
-          stage('Deploy Kubernetes') {
-            steps{
-                sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
-                sh 'cat deploy/deployment.yaml'
-                withKubeConfig(credentialsId: 'treelogy-sandbox-kubeconfig-rancher', serverUrl: 'https://rancher.treelogy.eco.br') {
-                    sh 'kubectl apply -f my-kubernetes-directory'
+            steps {
+                script {
+                    def dockerHome = tool 'docker'
+                    env.PATH = "${dockerHome}/bin:${env.PATH}"
+                    dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
+                    '-f ./deploy/Dockerfile .')
                 }
             }
-          }
+        }
+        stage('Docker Push Image') {
+            steps {
+                script {
+                        docker.withRegistry('https://registry.hub.docker.com', 'treelogy-sandbox-docker-hub') {
+                        dockerapp.push('latest')
+                        dockerapp.push("${env.BUILD_ID}")
+                    }
+                }
+            }
+        }
+        stage('Deploy Kubernetes') {
+        steps{
+            sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
+            sh 'cat deploy/deployment.yaml'
+            withKubeConfig(credentialsId: 'treelogy-sandbox-kubeconfig-rancher', serverUrl: 'https://rancher.treelogy.eco.br') {
+                sh 'kubectl apply -f my-kubernetes-directory'
+            }
+        }
+        }
     }
 }
