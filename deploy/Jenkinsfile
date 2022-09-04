@@ -32,13 +32,11 @@ pipeline{
             }
         }
         stage('Deploy Kubernetes') {
-        steps{
-            sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
-            sh 'cat deploy/deployment.yaml'
-            withKubeConfig(credentialsId: 'treelogy-sandbox-kubeconfig-rancher', serverUrl: 'https://rancher.treelogy.eco.br') {
-                sh 'kubectl apply -f my-kubernetes-directory'
+            steps {
+                sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
+                sh 'cat deploy/deployment.yaml'
+                sh 'kubectl apply -f deploy/deployment.yaml'
             }
-        }
         }
     }
 }
