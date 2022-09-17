@@ -15,11 +15,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Jenkins Job Trigger
-        uses: estherk0/jenkins-trigger@1.0
+      - name: Trigger jenkins job
+        uses: joshlk/jenkins-githubaction@master
         with:
-          url: http://jenkins.treelogy.eco.br/
+          url: http://jenkins.treelogy.eco.br
           job_name: treelogy-template-back
-          username: githbu
-          api_token: 110e75f9206b73d90005716aa0908b5fae
+          username: ${{ secrets.JENKINS_USER }}
+          api_token: ${{ secrets.JENKINS_TOKEN }}
           timeout: "1000"
