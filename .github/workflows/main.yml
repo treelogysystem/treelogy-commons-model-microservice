@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Jenkins-Action
-        uses: joshlk/jenkins-githubaction@V0.0.1
+        uses: treelogysystem/treelogy-template-back@master
         with:
           url: http://jenkins.treelogy.eco.br/
           job_name: treelogy-template-back
