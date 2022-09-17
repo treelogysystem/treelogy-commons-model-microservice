@@ -1,0 +1,25 @@
+name: jenkins-CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ master, development ]
+  pull_request:
+    branches: [ master, development ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Jenkins-Action
+        uses: treelogysystem/treelogy-template-back@master
+        with:
+          url: http://jenkins.treelogy.eco.br/
+          job_name: treelogy-template-back
+          username: githbu
+          api_token: 110e75f9206b73d90005716aa0908b5fae
+          timeout: "1000"
