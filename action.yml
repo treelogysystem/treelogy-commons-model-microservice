@@ -39,3 +39,6 @@ inputs:
 outputs:
   build_url:
     description: "Jenkins build URL"
+runs:
+  using: "docker"
+  image: "Dockerfile"
