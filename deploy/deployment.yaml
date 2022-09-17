@@ -23,7 +23,7 @@ spec:
         - name: treelogy-template-back-api
           image: cezarfelps/treelogy-template-back:{{tag}}
           ports:
-            - containerPort: 8080
+            - containerPort: 81
 
 ---
 kind: Service
@@ -37,8 +37,8 @@ spec:
   type: ClusterIP
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 81
+      targetPort: 81
 
 
 ---
@@ -57,4 +57,4 @@ spec:
           - path: /
             backend:
               serviceName: treelogy-template-back-service
-              servicePort: 80
+              servicePort: 81
