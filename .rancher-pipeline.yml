@@ -1,0 +1,5 @@
+stages:
+- name: Deploy Structure Cluster
+  steps:
+  - applyYamlConfig:
+      path: ./deploy/deployment.yaml
