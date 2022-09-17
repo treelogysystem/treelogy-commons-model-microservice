@@ -15,8 +15,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Jenkins-Action
-        uses: treelogysystem/treelogy-template-back@master
+      - name: Jenkins Job Trigger
+        uses: estherk0/jenkins-trigger@1.0
         with:
           url: http://jenkins.treelogy.eco.br/
           job_name: treelogy-template-back
