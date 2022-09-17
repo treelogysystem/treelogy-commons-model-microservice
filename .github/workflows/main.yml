@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger jenkins job
+        uses: treelogysystem/treelogy-template-back@master
         with:
           url: http://jenkins.treelogy.eco.br/
           job_name: treelogy-template-back
