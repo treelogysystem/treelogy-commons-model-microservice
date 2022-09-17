@@ -40,5 +40,5 @@ outputs:
   build_url:
     description: "Jenkins build URL"
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: "jenkins"
+  development: "deploy/Jenkinsfile"
