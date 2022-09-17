@@ -14,31 +14,30 @@ pipeline{
             }
         }
         stage('Docker Build Image') {
-            steps {
-                script {
-                    dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
-                    '-f ./deploy/Dockerfile .')
-                }
-            }
-        }
-        stage('Docker Push Image') {
-            steps {
-                script {
-                        docker.withRegistry('https://registry.hub.docker.com', 'treelogy-sandbox-docker-hub') {
-                        dockerapp.push('latest')
-                        dockerapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
-        stage('Deploy Kubernetes') {
-            environment {
+                      steps {
+                          script {
+                              dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
+                                '-f ./deploy/Dockerfile .')
+                          }
+                      }
+                  }
+          stage('Docker Push Image') {
+              steps {
+                  script {
+                          docker.withRegistry('https://registry.hub.docker.com', 'treelogy-docker-hub') {
+                          dockerapp.push('latest')
+                          dockerapp.push("${env.BUILD_ID}")
+                      }
+                  }
+              }
+          }
+        stage ('Update Deployment Kubernetes'){
+          environment {
                 tag = "${env.BUILD_ID}"
             }
-            steps {
+            steps{
                 sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
-                sh 'cat deploy/deployment.yaml'
-                sh 'kubectl apply -f deploy/deployment.yaml'
+                sh 'cat deploy/deployment
             }
         }
     }
