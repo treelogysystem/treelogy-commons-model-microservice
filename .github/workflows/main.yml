@@ -19,6 +19,15 @@ jobs:
       name: Build
       runs-on: ubuntu-latest
       steps:
+       - name: Trigger jenkins job
+         uses: joshlk/jenkins-githubaction@master
+         with:
+           url: https://jenkins_url
+           job_name: jenkins_job_name
+           username: ${{ secrets.JENKINS_USER }}
+           api_token: ${{ secrets.JENKINS_TOKEN }}
+           timeout: "1000"
+
       # A workflow run is made up of one or more jobs that can run sequentially or in parallel
       - name: status jenkins job
         uses: joshlk/jenkins-githubaction@master
