@@ -14,15 +14,16 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-      name: Build
-      runs-on: ubuntu-latest
-      steps:
-      - name: trigger single Job
-        uses: appleboy/jenkins-action@master
+  trigger-a-jenkins-job:
+    runs-on: ubuntu-latest
+    steps:
+      - id: triggerjenkinsjob
+        uses: mickeygoussetorg/trigger-jenkins-job@v1
         with:
-          url: "http://jenkins.treelogy.eco.br"
-          user: "github"
-          token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
-          job: "treelogy-template-backend"
+          jenkins-server:  "118f3cbcdfbdeccb488bbb579ce7e9c79d" # URL of the jenkins server. ex: http://myjenkins.acme.com:8080
+          jenkins-job: "treelogy-template-backend" # The name of the jenkins job to run
+          jenkins-username: "github" # user name for accessing jenkins
+          jenkins-pat: "118f3cbcdfbdeccb488bbb579ce7e9c79d" # personal Access token for accessing Jenkins
+          poll-time: 10 # how often (seconds) to poll the jenkins server for results
+          timeout-value: 600 # How long (seconds) to poll before timing out the action
+          verbose: true # true/false - turns on extra logging
