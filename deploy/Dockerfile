@@ -1,4 +1,4 @@
 FROM openjdk:11
 VOLUME /tmp
-ADD ./target/template-back-0.0.1-SNAPSHOT.jar template.jar
+ADD /var/lib/jenkins/workspace/ogy-template-backend_feature_002/build-backend template.jar
 ENTRYPOINT ["java","-jar","/template.jar"]
