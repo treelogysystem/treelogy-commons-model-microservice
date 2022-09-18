@@ -31,10 +31,10 @@ jobs:
       - name: Trigger jenkins job
         uses: joshlk/jenkins-githubaction@master
         with:
-          url: https://jenkins_url
-          job_name: jenkins_job_name
-          username: ${{ secrets.JENKINS_USER }}
-          api_token: ${{ secrets.JENKINS_TOKEN }}
+          url: "http://jenkins.treelogy.eco.br"
+          job_name: "treelogy-template-backend"
+          username: "github"
+          api_token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
           timeout: "1000"
 
       - name: Merge me!
