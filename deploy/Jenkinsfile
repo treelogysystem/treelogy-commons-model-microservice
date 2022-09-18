@@ -28,6 +28,7 @@ pipeline{
               steps {
                   script {
                       echo "${VERSION}"
+                      echo "${IMAGE}"
                       dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
                         '-f ./deploy/Dockerfile .')
                   }
