@@ -24,6 +24,6 @@ jobs:
           jenkins-job: "treelogy-template-backend" # The name of the jenkins job to run
           jenkins-username: "github" # user name for accessing jenkins
           jenkins-pat: "118f3cbcdfbdeccb488bbb579ce7e9c79d" # personal Access token for accessing Jenkins
-          poll-time: 10 # how often (seconds) to poll the jenkins server for results
+          poll-time: 100 # how often (seconds) to poll the jenkins server for results
           timeout-value: 600 # How long (seconds) to poll before timing out the action
           verbose: true # true/false - turns on extra logging
