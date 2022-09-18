@@ -19,6 +19,7 @@ jobs:
       name: Build
       runs-on: ubuntu-latest
       steps:
+
       - name: trigger jenkins job
         uses: appleboy/jenkins-action@master
         with:
@@ -27,16 +28,14 @@ jobs:
           token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
           job: "treelogy-template-backend"
 
-      - id: triggerjenkinsjob
-      uses: mickeygoussetorg/trigger-jenkins-job@v1
-      with:
-        jenkins-server:  "http://jenkins.treelogy.eco.br" # URL of the jenkins server. ex: http://myjenkins.acme.com:8080
-        jenkins-job: ""treelogy-template-backend" # The name of the jenkins job to run
-        jenkins-username: "github" # user name for accessing jenkins
-        jenkins-pat: "118f3cbcdfbdeccb488bbb579ce7e9c79d" # personal Access token for accessing Jenkins
-        poll-time: 10 # how often (seconds) to poll the jenkins server for results
-        timeout-value: 600 # How long (seconds) to poll before timing out the action
-        verbose: true # true/false - turns on extra logging
+      - name: Trigger jenkins job
+        uses: joshlk/jenkins-githubaction@master
+        with:
+          url: https://jenkins_url
+          job_name: jenkins_job_name
+          username: ${{ secrets.JENKINS_USER }}
+          api_token: ${{ secrets.JENKINS_TOKEN }}
+          timeout: "1000"
 
       - name: Merge me!
         uses: ridedott/merge-me-action@v2
