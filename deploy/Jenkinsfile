@@ -6,16 +6,16 @@ pipeline{
         }
         stage ('Build Backend'){
             steps{
-                dir('code-source'){
+                dir('build-backend'){
                     git branch: ${branch}, credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
                     sh 'echo Build do Backend'
                     sh 'mvn install'
                 }
             }
         }
-        stage ('Build Backend'){
+        stage ('Unit Tests'){
             steps{
-                dir('code-source'){
+                dir('unit-test'){
                     git branch: ${branch}, credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
                     sh 'echo Unit Tests'
                     sh 'mvn test'
