@@ -19,14 +19,14 @@ jobs:
       name: Build
       runs-on: ubuntu-latest
       steps:
-       - name: Trigger jenkins job
-         uses: joshlk/jenkins-githubaction@master
-         with:
-           url: https://jenkins_url
-           job_name: jenkins_job_name
-           username: ${{ secrets.JENKINS_USER }}
-           api_token: ${{ secrets.JENKINS_TOKEN }}
-           timeout: "1000"
+      # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+      - name: trigger jenkins job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: "http://jenkins.treelogy.eco.br"
+          user: "github"
+          token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
+          job: "treelogy-template-backend"
 
       # A workflow run is made up of one or more jobs that can run sequentially or in parallel
       - name: status jenkins job
