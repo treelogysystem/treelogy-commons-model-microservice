@@ -25,7 +25,7 @@ jobs:
           jenkins-url: "http://jenkins.treelogy.eco.br"
           jenkins-user: "github"
           jenkins-pat: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
-          job: "treelogy-template-backend/job/feature/002"
+          job: "treelogy-template-backend/feature%252F002/"
 
       # A workflow run is made up of one or more jobs that can run sequentially or in parallel
       - name: trigger jenkins job
