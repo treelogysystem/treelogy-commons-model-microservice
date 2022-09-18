@@ -1,36 +1,45 @@
 pipeline{
     agent any
     stages{
+        environment {
+            branch = "feature/002"
+        }
         stage ('Build Backend'){
             steps{
-                sh 'echo Build do Backend'
-                sh 'mvn install'
+                dir('code-source'){
+                    git branch: ${branch}, credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
+                    sh 'echo Build do Backend'
+                    sh 'mvn install'
+                }
             }
         }
-        stage ('Unit Tests'){
+        stage ('Build Backend'){
             steps{
-                sh 'echo Unit Tests'
-                sh 'mvn test'
+                dir('code-source'){
+                    git branch: ${branch}, credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
+                    sh 'echo Unit Tests'
+                    sh 'mvn test'
+                }
             }
         }
         stage('Docker Build Image') {
-                      steps {
-                          script {
-                              dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
-                                '-f ./deploy/Dockerfile .')
-                          }
-                      }
-                  }
-          stage('Docker Push Image') {
               steps {
                   script {
-                          docker.withRegistry('https://registry.hub.docker.com', 'treelogy-docker-hub') {
-                          dockerapp.push('latest')
-                          dockerapp.push("${env.BUILD_ID}")
-                      }
+                      dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
+                        '-f ./deploy/Dockerfile .')
                   }
               }
           }
+      stage('Docker Push Image') {
+          steps {
+              script {
+                      docker.withRegistry('https://registry.hub.docker.com', 'treelogy-docker-hub') {
+                      dockerapp.push('latest')
+                      dockerapp.push("${env.BUILD_ID}")
+                  }
+              }
+          }
+      }
         stage ('Update Deployment Kubernetes'){
           environment {
                 tag = "${env.BUILD_ID}"
