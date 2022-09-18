@@ -1,6 +1,6 @@
 def BRANCH = "feature/002"
 checkout([$class: 'GitSCM',
-          branches: [[name: ${BRANCH}]],
+          branches: [[name: 'feature/002']],
           userRemoteConfigs: [[url: 'https://github.com/treelogysystem/treelogy-template-back']]])
 pipeline{
     agent any
@@ -8,7 +8,7 @@ pipeline{
         stage ('Build Backend'){
             steps{
                 dir('build-backend'){
-                    git branch: ${BRANCH}, credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
+                    git branch: 'feature/002', credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
                     sh 'echo Build do Backend'
                     sh 'mvn install'
                 }
@@ -17,7 +17,7 @@ pipeline{
         stage ('Unit Tests'){
             steps{
                 dir('unit-test'){
-                    git branch: ${BRANCH}, credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
+                    git branch: 'feature/002', credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
                     sh 'echo Unit Tests'
                     sh 'mvn test'
                 }
