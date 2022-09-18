@@ -1,29 +1,19 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: Your GHA
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   pull_request:
-    branches: [ "master" ]
+    types: [opened, synchronize]
 
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  trigger-a-jenkins-job:
+  your_job_name:
+    name: Trigger Jenkins Job
     runs-on: ubuntu-latest
     steps:
-      - id: triggerjenkinsjob
-        uses: mickeygoussetorg/trigger-jenkins-job@v1
+      - name: Trigger your-awesome-job-name job
+        uses: toptal/jenkins-job-trigger-action@master
         with:
-          jenkins-server:  "118f3cbcdfbdeccb488bbb579ce7e9c79d" # URL of the jenkins server. ex: http://myjenkins.acme.com:8080
-          jenkins-job: "treelogy-template-backend" # The name of the jenkins job to run
-          jenkins-username: "github" # user name for accessing jenkins
-          jenkins-pat: "118f3cbcdfbdeccb488bbb579ce7e9c79d" # personal Access token for accessing Jenkins
-          poll-time: 100 # how often (seconds) to poll the jenkins server for results
-          timeout-value: 600 # How long (seconds) to poll before timing out the action
-          verbose: true # true/false - turns on extra logging
+          jenkins_url: "http://jenkins.treelogy.eco.br/"
+          jenkins_user: "github"
+          jenkins_token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
+          proxy: "https://github.com/treelogysystem/treelogy-template-back/"
+          job_name: "treelogy-template-backend"
+          job_timeout: "3600" # Default 30 sec. (optional)
