@@ -1,9 +1,8 @@
-def BRANCH = "feature/002"
-checkout([$class: 'GitSCM',
-          branches: [[name: 'feature/002']],
-          userRemoteConfigs: [[url: 'https://github.com/treelogysystem/treelogy-template-back']]])
 pipeline{
     agent any
+    environment {
+        BRANCH = 'master'
+    }
     stages{
         stage ('Build Backend'){
             steps{
