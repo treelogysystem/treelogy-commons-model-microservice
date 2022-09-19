@@ -3,3 +3,7 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./deploy/deployment.yaml
+branch:
+  include:
+  - development
+notification: {}
