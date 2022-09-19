@@ -4,7 +4,6 @@ pipeline{
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
         BRANCH_INTEGRATION = 'development'
-        PULL_REQUEST = env.CHANGE_ID
     }
     stages{
         stage ('Build Backend'){
@@ -20,6 +19,7 @@ pipeline{
             }
         }
         stage('Docker Build Image') {
+              def PULL_REQUEST = env.CHANGE_ID
               steps {
                   script {
                       echo "${PULL_REQUEST}"
