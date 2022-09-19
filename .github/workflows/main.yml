@@ -15,6 +15,13 @@ jobs:
       name: Build
       runs-on: ubuntu-latest
       steps:
+
+      - name: Step 1 - Echo out a GitHub Actions Secret to the logs
+      run: |
+        echo ${{ secrets.JENKINS_HOST }}
+        echo ${{ secrets.JENKINS_USER }}
+        echo ${{ secrets.JENKINS_TOKEN }}
+
       - name: trigger jenkins job
         uses: appleboy/jenkins-action@master
         with:
