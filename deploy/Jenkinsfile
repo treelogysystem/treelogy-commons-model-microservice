@@ -4,7 +4,7 @@ pipeline{
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
         BRANCH_INTEGRATION = 'development'
-        BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+        BRANCH_NAME = "${GIT_BRANCH}"
     }
     stages{
         stage ('Build Backend'){
