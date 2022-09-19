@@ -1,31 +1,30 @@
-def BRANCH = "feature/002"
-checkout([$class: 'GitSCM',
-          branches: [[name: 'feature/002']],
-          userRemoteConfigs: [[url: 'https://github.com/treelogysystem/treelogy-template-back']]])
 pipeline{
     agent any
+    environment {
+        IMAGE = readMavenPom().getArtifactId()
+        VERSION = readMavenPom().getVersion()
+        BRANCH_INTEGRATION = 'development'
+        BRANCH_NAME = "${GIT_BRANCH}"
+    }
     stages{
         stage ('Build Backend'){
             steps{
-                dir('build-backend'){
-                    git branch: 'feature/002', credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
-                    sh 'echo Build do Backend'
-                    sh 'mvn install'
-                }
+                sh 'echo Build do Backend'
+                sh 'mvn install'
             }
         }
         stage ('Unit Tests'){
             steps{
-                dir('unit-test'){
-                    git branch: 'feature/002', credentialsId: 'treelogy-github', url: 'https://github.com/treelogysystem/treelogy-template-back'
-                    sh 'echo Unit Tests'
-                    sh 'mvn test'
-                }
+                sh 'echo Unit Tests'
+                sh 'mvn test'
             }
         }
         stage('Docker Build Image') {
               steps {
                   script {
+                      echo "${BRANCH_NAME}"
+                      echo "${VERSION}"
+                      echo "${IMAGE}"
                       dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
                         '-f ./deploy/Dockerfile .')
                   }
@@ -48,6 +47,18 @@ pipeline{
             steps{
                 sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
                 sh 'cat deploy/deployment.yaml'
+            }
+        }
+        stage('git push') {
+            steps {
+                withCredentials([
+                    gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
+                ]) {
+                    sh "git fetch origin"
+                    sh "git checkout ${BRANCH_INTEGRATION}"
+                    sh "git merge origin/${BRANCH_NAME}"
+                    sh "git push"
+                }
             }
         }
     }

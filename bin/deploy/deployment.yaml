@@ -1,0 +1,60 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: treelogy-template-back-server
+  namespace: treelogy-template
+  labels:
+    app: treelogy-template-back-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: treelogy-template-back-api
+  template:
+    metadata:
+      labels:
+        app: treelogy-template-back-api
+    spec:
+      imagePullSecrets:
+        - name: pipeline-docker-registry
+      containers:
+        - name: treelogy-template-back-api
+          image: cezarfelps/treelogy-template-back:{{tag}}
+          ports:
+            - containerPort: 81
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: treelogy-template-back-service
+  namespace: treelogy-template
+spec:
+  selector:
+    app: treelogy-template-back-api
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 81
+      targetPort: 81
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: treelogy-template
+  name: treelogy-template-back-ingress
+  annotations:
+    allow.http: "false"
+spec:
+  rules:
+    - host: treelogy-template-back.rancher.treelogy.eco.br
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: treelogy-template-back-service
+              servicePort: 81
