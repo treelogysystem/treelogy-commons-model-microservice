@@ -1,9 +1,10 @@
 pipeline{
     agent any
     environment {
-    //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
-    IMAGE = readMavenPom().getArtifactId()
-    VERSION = readMavenPom().getVersion()
+        IMAGE = readMavenPom().getArtifactId()
+        VERSION = readMavenPom().getVersion()
+        BRANCH_INTEGRATION = 'development'
+        PULL_REQUEST = env.CHANGE_ID
     }
     stages{
         stage ('Build Backend'){
@@ -21,6 +22,7 @@ pipeline{
         stage('Docker Build Image') {
               steps {
                   script {
+                      echo "${PULL_REQUEST}"
                       echo "${VERSION}"
                       echo "${IMAGE}"
                       dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
