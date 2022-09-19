@@ -22,3 +22,12 @@ jobs:
           user: "github"
           token: "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"
           job: "treelogy-template-backend"
+
+      - name: Trigger jenkins job
+              uses: joshlk/jenkins-githubaction@master
+              with:
+                url: http://jenkins.treelogy.eco.br
+                job_name: treelogy-template-backend
+                username: ${{ secrets.JENKINS_USER }}
+                api_token: ${{ secrets.JENKINS_TOKEN }}
+                timeout: "1000"
