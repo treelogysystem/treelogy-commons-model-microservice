@@ -27,15 +27,6 @@ jobs:
           token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
           job: "treelogy-template-backend"
 
-      - name: Trigger jenkins job
-        uses: joshlk/jenkins-githubaction@master
-        with:
-          url: "http://jenkins.treelogy.eco.br"
-          job_name: "treelogy-template-backend"
-          username: "github"
-          api_token: "118f3cbcdfbdeccb488bbb579ce7e9c79d"
-          timeout: "1000"
-
       - name: Merge me!
         uses: ridedott/merge-me-action@v2
         with:
