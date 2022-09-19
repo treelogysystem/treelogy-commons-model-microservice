@@ -3,8 +3,11 @@ pipeline{
     environment {
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
-        BRANCH_INTEGRATION = 'development'
         BRANCH_NAME = "${GIT_BRANCH}"
+
+        // Configure as variates
+        BRANCH_INTEGRATION = 'development'
+        REPOSITORY_SCM = "https://github.com/treelogysystem/treelogy-template-back"
     }
     stages{
         stage ('Build Backend'){
@@ -63,7 +66,7 @@ pipeline{
     void setBuildStatus(String message, String state) {
         step([
             $class: "GitHubCommitStatusSetter",
-            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/vaibhavkumar779/multibranchJenkinsPRbuildStatus"],
+            reposSource: [$class: "ManuallyEnteredRepositorySource", url: ${REPOSITORY_SCM}],
             contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
             errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
             statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]]]
