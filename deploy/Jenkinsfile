@@ -54,8 +54,9 @@ pipeline{
                 withCredentials([
                     gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
                 ]) {
+                    sh "git fetch origin"
                     sh "git checkout ${BRANCH_INTEGRATION}"
-                    sh "git merge ${BRANCH_NAME}"
+                    sh "git merge origin/${BRANCH_NAME}"
                     sh "git push"
                 }
             }
