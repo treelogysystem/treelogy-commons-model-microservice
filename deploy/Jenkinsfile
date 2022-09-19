@@ -4,6 +4,7 @@ pipeline{
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
         BRANCH_INTEGRATION = 'development'
+        BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
     }
     stages{
         stage ('Build Backend'){
@@ -19,12 +20,9 @@ pipeline{
             }
         }
         stage('Docker Build Image') {
-              environment {
-                  PULL_REQUEST = "${env.CHANGE_ID}"
-              }
               steps {
                   script {
-                      echo "${PULL_REQUEST}"
+                      echo "${BRANCH_NAME}"
                       echo "${VERSION}"
                       echo "${IMAGE}"
                       dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
@@ -49,6 +47,17 @@ pipeline{
             steps{
                 sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
                 sh 'cat deploy/deployment.yaml'
+            }
+        }
+        stage('git push') {
+            steps {
+                withCredentials([
+                    gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
+                ]) {
+                    sh "git checkout ${BRANCH_INTEGRATION}"
+                    sh "git merge ${BRANCH_NAME}"
+                    sh "git push"
+                }
             }
         }
     }

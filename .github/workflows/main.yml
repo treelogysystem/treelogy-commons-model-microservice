@@ -20,6 +20,15 @@ jobs:
       runs-on: ubuntu-latest
       steps:
 
+      - name: Test
+        uses: actions/github-script@0.3.0
+        with:
+          github-token: "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"
+          script: |
+            const core = require('@actions/core')
+            const prNumber = context.payload.number;
+            core.exportVariable('PULL_NUMBER', prNumber);
+
       - name: trigger jenkins job
         uses: appleboy/jenkins-action@master
         with:
