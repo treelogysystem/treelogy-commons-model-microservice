@@ -22,11 +22,8 @@ pipeline{
         stage('Docker Build Image') {
               steps {
                   script {
-                      echo "${BRANCH_NAME}"
-                      echo "${VERSION}"
-                      echo "${IMAGE}"
                       dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
-                        '-f ./deploy/Dockerfile .')
+                        "--build-arg artifactId=${IMAGE} --build-arg version=${VERSION} -f ./deploy/Dockerfile .")
                   }
               }
           }
@@ -40,16 +37,7 @@ pipeline{
               }
           }
       }
-        stage ('Update Deployment Kubernetes'){
-          environment {
-                tag = "${env.BUILD_ID}"
-            }
-            steps{
-                sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
-                sh 'cat deploy/deployment.yaml'
-            }
-        }
-        stage('git push') {
+        stage('Merge Branch') {
             steps {
                 withCredentials([
                     gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')

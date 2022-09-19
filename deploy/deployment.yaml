@@ -21,7 +21,7 @@ spec:
         - name: pipeline-docker-registry
       containers:
         - name: treelogy-template-back-api
-          image: cezarfelps/treelogy-template-back:{{tag}}
+          image: cezarfelps/treelogy-template-back:lasted
           ports:
             - containerPort: 81
 
