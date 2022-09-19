@@ -19,7 +19,9 @@ pipeline{
             }
         }
         stage('Docker Build Image') {
-              def PULL_REQUEST = env.CHANGE_ID
+              environment {
+                  PULL_REQUEST = "${env.CHANGE_ID}"
+              }
               steps {
                   script {
                       echo "${PULL_REQUEST}"
