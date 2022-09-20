@@ -19,7 +19,7 @@ pipeline{
         stage ('Unit Tests'){
             steps{
                 sh 'echo Unit Tests'
-                sh 'mvn test'
+                sh 'mvnnn test'
             }
         }
         stage('Docker Build Image') {
@@ -35,7 +35,7 @@ pipeline{
               script {
                       docker.withRegistry('https://registry.hub.docker.com', 'treelogy-docker-hub') {
                       dockerapp.push('latest')
-                      dockerapp.push("${env.BUILD_IDdd}")
+                      dockerapp.push("${env.BUILD_ID}")
                   }
               }
           }
