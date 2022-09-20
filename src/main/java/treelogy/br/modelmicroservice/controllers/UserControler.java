@@ -1,11 +1,11 @@
-package treelogy.br.templateback.controllers;
+package treelogy.br.modelmicroservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import treelogy.br.templateback.models.UserModel;
-import treelogy.br.templateback.repositories.UserRepository;
+import treelogy.br.modelmicroservice.models.UserModel;
+import treelogy.br.modelmicroservice.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/v1")
