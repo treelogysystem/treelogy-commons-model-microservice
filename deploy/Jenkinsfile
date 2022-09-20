@@ -40,20 +40,20 @@ pipeline{
               }
           }
       }
-//         stage('Merge Branch') {
-//             steps {
-//                 withCredentials([
-//                     gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
-//                 ]) {
-//                     sh "git fetch origin"
-//                     sh "git checkout ${BRANCH_INTEGRATION}"
-//                     sh "git pull"
+        stage('Merge Branch') {
+            steps {
+                withCredentials([
+                    gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
+                ]) {
+                    sh "git fetch origin"
+                    sh "git checkout ${BRANCH_INTEGRATION}"
+                    sh "git pull"
 //                     sh "git merge origin/${BRANCH_NAME}"
-//                     sh "git push"
-//                 }
-//             }
-//         }
-//     }
+                    sh "git push"
+                }
+            }
+        }
+    }
     post{
             success{
                 setBuildStatus("Build succeeded", "SUCCESS");
