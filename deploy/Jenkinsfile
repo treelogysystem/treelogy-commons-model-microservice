@@ -40,20 +40,20 @@ pipeline{
               }
           }
       }
-        stage('Merge Branch') {
-            steps {
-                withCredentials([
-                    gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
-                ]) {
-                    sh "git fetch origin"
-                    sh "git checkout ${BRANCH_INTEGRATION}"
-                    sh "git pull"
-                    sh "git merge origin/${BRANCH_NAME}"
-                    sh "git push"
-                }
-            }
-        }
-    }
+//         stage('Merge Branch') {
+//             steps {
+//                 withCredentials([
+//                     gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
+//                 ]) {
+//                     sh "git fetch origin"
+//                     sh "git checkout ${BRANCH_INTEGRATION}"
+//                     sh "git pull"
+//                     sh "git merge origin/${BRANCH_NAME}"
+//                     sh "git push"
+//                 }
+//             }
+//         }
+//     }
     post{
             success{
                 setBuildStatus("Build succeeded", "SUCCESS");
@@ -66,7 +66,7 @@ pipeline{
     void setBuildStatus(String message, String state) {
         step([
             $class: "GitHubCommitStatusSetter",
-            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/treelogysystem/treelogy-template-back"],
+            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${REPOSITORY_SCM}"],
             contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
             errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
             statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]]]
