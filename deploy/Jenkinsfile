@@ -5,6 +5,7 @@ pipeline{
         VERSION = readMavenPom().getVersion()
         BRANCH_NAME = "${GIT_BRANCH}"
         BRANCH_INTEGRATION = 'development' // Configure
+        REPOSITORY_SCM = 'https://github.com/treelogysystem/treelogy-model-microservice' // Configure
     }
     stages{
         stage ('Build Backend'){
@@ -51,4 +52,21 @@ pipeline{
             }
         }
     }
+    post{
+            success{
+                setBuildStatus("Build succeeded", "SUCCESS");
+            }
+            failure {
+                setBuildStatus("Build failed", "FAILURE");
+            }
+        }
+    }
+    void setBuildStatus(String message, String state) {
+        step([
+            $class: "GitHubCommitStatusSetter",
+            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${REPOSITORY_SCM}"],
+            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+            errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+            statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]]]
+        ]);
 }
