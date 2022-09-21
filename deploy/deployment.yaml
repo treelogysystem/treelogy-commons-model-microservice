@@ -3,25 +3,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: treelogy-template-back-server
-  namespace: treelogy-template
+  name: treelogy-model-microservice-server
+  namespace: treelogy-commons
   labels:
-    app: treelogy-template-back-api
+    app: treelogy-model-microservice-api
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: treelogy-template-back-api
+      app: treelogy-model-microservice-api
   template:
     metadata:
       labels:
-        app: treelogy-template-back-api
+        app: treelogy-model-microservice-api
     spec:
       imagePullSecrets:
         - name: pipeline-docker-registry
       containers:
-        - name: treelogy-template-back-api
-          image: cezarfelps/treelogy-template-back:lasted
+        - name: treelogy-model-microservice-api
+          image: cezarfelps/treelogy-model-microservice:lasted
           ports:
             - containerPort: 81
 
@@ -29,11 +29,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: treelogy-template-back-service
-  namespace: treelogy-template
+  name: treelogy-model-microservice-service
+  namespace: treelogy-commons
 spec:
   selector:
-    app: treelogy-template-back-api
+    app: treelogy-model-microservice-api
   type: ClusterIP
   ports:
     - protocol: TCP
@@ -45,16 +45,16 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: treelogy-template
-  name: treelogy-template-back-ingress
+  namespace: treelogy-commons
+  name: treelogy-model-microservice-ingress
   annotations:
     allow.http: "false"
 spec:
   rules:
-    - host: treelogy-template-back.rancher.treelogy.eco.br
+    - host: treelogy-model-microservice.rancher.treelogy.eco.br
       http:
         paths:
           - path: /
             backend:
-              serviceName: treelogy-template-back-service
+              serviceName: treelogy-model-microservice-service
               servicePort: 81
