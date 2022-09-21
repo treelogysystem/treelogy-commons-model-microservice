@@ -23,7 +23,7 @@ pipeline{
         stage('Docker Build Image') {
               steps {
                   script {
-                      dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
+                      dockerapp = docker.build("cezarfelps/treelogy-model-microservice:${env.BUILD_ID}",
                         "--build-arg artifactId=${IMAGE} --build-arg version=${VERSION} -f ./deploy/Dockerfile .")
                   }
               }
