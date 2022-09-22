@@ -27,18 +27,6 @@ pipeline{
                 }
             }
         }
-
-//         stage ('Sonar Analysis'){
-//             environment{
-//                 scannerHome = tool 'SONAR_SCANNER'
-//             }
-//             steps{
-//                 bat 'echo Sonar Analysis'
-//                 withSonarQubeEnv ('TREELOGY-SONAR'){
-//                     bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=treelogy-commons-model-microservice -Dsonar.host.url=http://sonarqube.rancher.treelogy.eco.br -Dsonar.login=sqa_5f098e2d3c93161e962141187155b470c9d5bfb9 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**"
-//                 }
-//             }
-//         }
         stage ('Quality Gate'){
             steps{
                 sleep(50)
