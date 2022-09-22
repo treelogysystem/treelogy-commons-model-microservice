@@ -5,7 +5,7 @@ pipeline{
         VERSION = readMavenPom().getVersion()
         BRANCH_NAME = "${GIT_BRANCH}"
         BRANCH_INTEGRATION = 'development' // Configure
-        REPOSITORY_SCM = 'https://github.com/treelogysystem/treelogy-model-microservice' // Configure
+        REPOSITORY_SCM = 'https://github.com/treelogysystem/treelogy-commons-model-microservice' // Configure
     }
     stages{
         stage ('Build Backend'){
@@ -18,6 +18,25 @@ pipeline{
             steps{
                 sh 'echo Unit Tests'
                 sh 'mvn test'
+            }
+        }
+        stage ('Sonar Analysis'){
+            environment{
+                scannerHome = tool 'SONAR_SCANNER'
+            }
+            steps{
+                bat 'echo Sonar Analysis'
+                withSonarQubeEnv ('TREELOGY-SONAR'){
+                    bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=treelogy-commons -Dsonar.host.url=http://sonarqube.rancher.treelogy.eco.br -Dsonar.login=sqa_5f098e2d3c93161e962141187155b470c9d5bfb9 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**"
+                }
+            }
+        }
+        stage ('Quality Gate'){
+            steps{
+                sleep(50)
+                timeout(time: 1, unit: 'MINUTES'){
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
         stage('Docker Build Image') {
