@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/treelogy-template-back.iml" filepath="$PROJECT_DIR$/.idea/treelogy-template-back.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/treelogy-commons-model-microservice.iml" filepath="$PROJECT_DIR$/.idea/treelogy-commons-model-microservice.iml" />
     </modules>
   </component>
 </project>

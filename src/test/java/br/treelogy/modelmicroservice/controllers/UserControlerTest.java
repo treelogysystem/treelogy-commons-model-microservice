@@ -1,4 +1,4 @@
-package treelogy.br.templateback.controllers;
+package br.treelogy.modelmicroservice.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

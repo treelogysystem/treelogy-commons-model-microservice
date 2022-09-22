@@ -1,9 +1,9 @@
-package treelogy.br.templateback.repositories;
+package br.treelogy.modelmicroservice.repositories;
 
+import br.treelogy.modelmicroservice.models.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import treelogy.br.templateback.models.UserModel;
 
 
 @Repository

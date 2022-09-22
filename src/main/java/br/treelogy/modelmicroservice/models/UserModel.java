@@ -1,4 +1,4 @@
-package treelogy.br.templateback.models;
+package br.treelogy.modelmicroservice.models;
 
 import org.springframework.lang.NonNull;
 

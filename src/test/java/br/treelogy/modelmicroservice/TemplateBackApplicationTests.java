@@ -1,4 +1,4 @@
-package treelogy.br.templateback;
+package br.treelogy.modelmicroservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package treelogy.br.templateback.controllers;
+package br.treelogy.modelmicroservice.controllers;
 
 
 import io.swagger.annotations.*;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import treelogy.br.templateback.models.UserModel;
+import br.treelogy.modelmicroservice.models.UserModel;
 
 import java.net.HttpURLConnection;
 
