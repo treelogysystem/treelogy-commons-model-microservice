@@ -22,6 +22,7 @@ pipeline{
         }
         stage('SonarQube analysis') {
             steps{
+                  bat 'echo Sonar Analysis'
                   withSonarQubeEnv('sonarqube') {
                     sh 'mvn sonar:sonar -Dsonar.projectKey=treelogy-commons-model-microservice -Dsonar.host.url=http://sonarqube.rancher.treelogy.eco.br -Dsonar.login=5f098e2d3c93161e962141187155b470c9d5bfb9'
                 }
@@ -29,6 +30,7 @@ pipeline{
         }
         stage ('Quality Gate'){
             steps{
+                bat 'echo Quality Gate'
                 sleep(50)
                 timeout(time: 1, unit: 'MINUTES'){
                     waitForQualityGate abortPipeline: true
