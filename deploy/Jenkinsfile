@@ -21,14 +21,17 @@ pipeline{
             }
         }
         stage('SonarQube analysis') {
+            environment{
+                scannerHome = tool 'SONAR_SCANNER'
+            }
             steps{
                   sh 'echo Sonar Analysis'
                   withSonarQubeEnv('sonarqube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=treelogy-commons-model-microservice -Dsonar.host.url=http://sonarqube.rancher.treelogy.eco.br -Dsonar.login=5f098e2d3c93161e962141187155b470c9d5bfb9'
+                    sh '${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=treelogy-commons-model-microservice -Dsonar.host.url=http://sonarqube.rancher.treelogy.eco.br -Dsonar.login=5f098e2d3c93161e962141187155b470c9d5bfb9'
                 }
             }
         }
-        stage ('Quality Gate'){
+        stage ('Quality Gate')
             steps{
                 sh 'echo Quality Gate'
                 sleep(50)
