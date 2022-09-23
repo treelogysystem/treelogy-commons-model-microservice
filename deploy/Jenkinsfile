@@ -22,12 +22,12 @@ pipeline{
         }
         stage('SonarQube analysis') {
             environment{
-                scannerHome = tool 'SONAR_SCANNER'
+                mvn = tool 'MAVEN-3.8.6'
             }
             steps{
                   sh 'echo Sonar Analysis'
-                  withSonarQubeEnv('SONAR_LOCAL') {
-                    sh "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=treelogy-commons-model-microservice"
+                  withSonarQubeEnv('TREELOGY-SONAR') {
+                    sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=treelogy-commons-model-microservice"
                   }
             }
         }
