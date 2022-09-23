@@ -4,8 +4,12 @@ pipeline{
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
         BRANCH_NAME = "${GIT_BRANCH}"
-        BRANCH_INTEGRATION = 'development' // Configure
-        REPOSITORY_SCM = 'https://github.com/treelogysystem/treelogy-commons-model-microservice' // Configure
+
+        /// CONFIGURE
+        BRANCH_INTEGRATION = 'development'
+        REPOSITORY_SCM = 'https://github.com/treelogysystem/treelogy-commons-model-microservice'
+        PROJECT_SONARQUBE = 'treelogy-commons-model-microservice'
+        REPOSITORY_DOCKERFILE = 'cezarfelps/treelogy-model-microservice'
     }
     stages{
         stage ('Build Backend'){
@@ -24,7 +28,7 @@ pipeline{
             steps{
                   sh 'echo Sonar Analysis'
                   withSonarQubeEnv('TREELOGY-SONAR') {
-                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=treelogy-commons-model-microservice"
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${PROJECT_SONARQUBE}"
                   }
             }
         }
@@ -40,7 +44,7 @@ pipeline{
         stage('Docker Build Image') {
               steps {
                   script {
-                      dockerapp = docker.build("cezarfelps/treelogy-model-microservice:${env.BUILD_ID}",
+                      dockerapp = docker.build("${REPOSITORY_DOCKERFILE}:${env.BUILD_ID}",
                         "--build-arg artifactId=${IMAGE} --build-arg version=${VERSION} -f ./deploy/Dockerfile .")
                   }
               }
