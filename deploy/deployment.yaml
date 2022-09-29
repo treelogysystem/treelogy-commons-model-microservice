@@ -51,7 +51,7 @@ metadata:
     allow.http: "false"
 spec:
   rules:
-    - host: treelogy-model-microservice.rancher.treelogy.eco.br
+    - host: treelogy-commons-model-microservice.rancher.treelogy.eco.br
       http:
         paths:
           - path: /

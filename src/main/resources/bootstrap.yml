@@ -5,10 +5,10 @@ spring:
     active: dev
   cloud:
     config:
-      uri: http://server-config.rancher.treelogy.eco.br
+      uri: http://treelogy-commons-config-server-services.rancher.treelogy.eco.br
       fail-fast: true
-      username: app
-      password: my-supersecret-password
+      username: user
+      password: pass
 management:
   endpoints:
     web:
