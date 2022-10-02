@@ -2,7 +2,7 @@ spring:
   application:
     name: treelogy-commons-model-microservice
   profiles:
-    active: dev
+    active: local
   cloud:
     config:
       uri: http://treelogy-commons-config-server-services.rancher.treelogy.eco.br
