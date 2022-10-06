@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: treelogy-commons-model-microservice
+  profiles:
+    active: local
+  cloud:
+    config:
+      uri: http://treelogy-commons-config-server-services.rancher.treelogy.eco.br
+      fail-fast: true
+      username: TREELOGY_SYSTEM_CLIENT_CONFIG
+      password: krf0mUaXMX
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

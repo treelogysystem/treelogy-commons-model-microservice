@@ -3,14 +3,19 @@ pipeline{
     environment {
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
-        BRANCH_INTEGRATION = 'development'
         BRANCH_NAME = "${GIT_BRANCH}"
+
+        /// CONFIGURE
+        BRANCH_INTEGRATION = 'development'
+        REPOSITORY_SCM = 'https://github.com/treelogysystem/treelogy-commons-model-microservice'
+        PROJECT_SONARQUBE = 'treelogy-commons-model-microservice'
+        REPOSITORY_DOCKERFILE = 'cezarfelps/treelogy-model-microservice'
     }
     stages{
         stage ('Build Backend'){
             steps{
                 sh 'echo Build do Backend'
-                sh 'mvn install'
+                sh 'mvn clean install -DskipTests'
             }
         }
         stage ('Unit Tests'){
@@ -19,14 +24,28 @@ pipeline{
                 sh 'mvn test'
             }
         }
+        stage('SonarQube analysis') {
+            steps{
+                  sh 'echo Sonar Analysis'
+                  withSonarQubeEnv('TREELOGY-SONAR') {
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${PROJECT_SONARQUBE}"
+                  }
+            }
+        }
+        stage ('Quality Gate'){
+            steps{
+                sh 'echo Quality Gate'
+                sleep(50)
+                timeout(time: 1, unit: 'MINUTES'){
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage('Docker Build Image') {
               steps {
                   script {
-                      echo "${BRANCH_NAME}"
-                      echo "${VERSION}"
-                      echo "${IMAGE}"
-                      dockerapp = docker.build("cezarfelps/treelogy-template-back:${env.BUILD_ID}",
-                        '-f ./deploy/Dockerfile .')
+                      dockerapp = docker.build("${REPOSITORY_DOCKERFILE}:${env.BUILD_ID}",
+                        "--build-arg artifactId=${IMAGE} --build-arg version=${VERSION} -f ./deploy/Dockerfile .")
                   }
               }
           }
@@ -40,22 +59,14 @@ pipeline{
               }
           }
       }
-        stage ('Update Deployment Kubernetes'){
-          environment {
-                tag = "${env.BUILD_ID}"
-            }
-            steps{
-                sh 'sed -i "s/{{tag}}/${tag} /g" deploy/deployment.yaml'
-                sh 'cat deploy/deployment.yaml'
-            }
-        }
-        stage('git push') {
+        stage('Merge Branch') {
             steps {
                 withCredentials([
                     gitUsernamePassword(credentialsId: 'treelogy-github', gitToolName: 'Default')
                 ]) {
                     sh "git fetch origin"
                     sh "git checkout ${BRANCH_INTEGRATION}"
+                    sh "git pull"
                     sh "git merge origin/${BRANCH_NAME}"
                     sh "git push"
                 }
