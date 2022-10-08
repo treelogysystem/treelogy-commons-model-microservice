@@ -5,10 +5,10 @@ spring:
     active: local
   cloud:
     config:
-      uri: http://treelogy-commons-config-server-services.rancher.treelogy.eco.br
+      uri: http://localhost:8888
       fail-fast: true
-      username: TREELOGY_SYSTEM_CLIENT_CONFIG
-      password: krf0mUaXMX
+      username: ${CONFIG_SERVER_USER}
+      password: ${CONFIG_SERVER_PASSWORD}
 management:
   endpoints:
     web:
